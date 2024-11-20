@@ -69,12 +69,10 @@ fn get_common_packages(branch_a: &HashMap<String, Vec<String>>, branch_b: &HashM
 }
 
 pub fn compare_versions(branch_a: &HashMap<String, Vec<String>>, branch_b: &HashMap<String, Vec<String>>) -> HashMap<String, Vec<String>> {
-	let common_packages = get_common_packages(branch_a, branch_b);
-
 	let mut newer_packages = HashMap::new();
 
 	for pkg_a in branch_a {
-		if common_packages.contains_key(&pkg_a.0.to_string()) {
+		if get_common_packages(branch_a, branch_b).contains_key(&pkg_a.0.to_string()) {
 			let pkg_b = branch_b.get_key_value(pkg_a.0.as_str())
 				.expect(format!("There is no package {} in the second branch", pkg_a.0.as_str()).as_str());
 
