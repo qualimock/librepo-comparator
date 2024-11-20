@@ -91,3 +91,23 @@ pub fn compare_versions(branch_a: &HashMap<String, Vec<String>>, branch_b: &Hash
 
 	newer_packages
 }
+
+pub fn packages_to_json(branch: &HashMap<String, Vec<String>>) -> Vec<Value> {
+	let mut packages = Vec::new();
+
+	for package in branch {
+		let package_json = json!({
+			"name": package.0,
+			"version": package.1[0],
+			"release": package.1[1],
+			"arch": package.1[2],
+			"disstag": package.1[3],
+			"epoch": package.1[4],
+			"source": package.1[5],
+		});
+
+		packages.push(package_json);
+	}
+
+	packages
+}
