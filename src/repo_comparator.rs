@@ -38,8 +38,8 @@ pub fn collect_packages(branch_json: Value) -> HashMap<String, Vec<String>> {
 }
 
 pub fn compare_branches(branch_a: &HashMap<String, Vec<String>>, branch_b: &HashMap<String, Vec<String>>) -> (HashMap<String, Vec<String>>, HashMap<String, Vec<String>>) {
-	let mut in_a_not_in_b = HashMap::new();
-	let mut in_b_not_in_a = HashMap::new();
+	let mut in_a_not_in_b = HashMap::new(); // Packages that exist in branch a only
+	let mut in_b_not_in_a = HashMap::new(); // Packages that exist in branch b only
 
 	for pkg in branch_a {
 		if !branch_b.contains_key(pkg.0) {
