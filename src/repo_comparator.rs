@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use reqwest;
 use serde_json::{Value, json};
 
@@ -20,7 +22,7 @@ pub fn collect_packages(branch_json: Value) -> HashMap<String, Vec<String>> {
 		.to_vec();
 
 	let mut packages = HashMap::new();
-	
+
 	for pkg in packages_json {
 		packages.insert(pkg.get("name").expect("Cannot get field 'name'").to_string().replace("\"", ""),
 						vec![pkg.get("version").expect("Cannot get field 'version'").to_string().replace("\"", ""),
