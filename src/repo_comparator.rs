@@ -35,3 +35,22 @@ pub fn collect_packages(branch_json: Value) -> HashMap<String, Vec<String>> {
 
 	packages
 }
+
+pub fn compare_branches(branch_a: &HashMap<String, Vec<String>>, branch_b: &HashMap<String, Vec<String>>) -> (HashMap<String, Vec<String>>, HashMap<String, Vec<String>>) {
+	let mut in_a_not_in_b = HashMap::new();
+	let mut in_b_not_in_a = HashMap::new();
+
+	for pkg in branch_a {
+		if !branch_b.contains_key(pkg.0) {
+			in_a_not_in_b.insert(pkg.0.to_string(), pkg.1.to_vec());
+		}
+	}
+
+	for pkg in branch_b {
+		if !branch_a.contains_key(pkg.0) {
+			in_b_not_in_a.insert(pkg.0.to_string(), pkg.1.to_vec());
+		}
+	}
+
+	(in_a_not_in_b, in_b_not_in_a)
+}
