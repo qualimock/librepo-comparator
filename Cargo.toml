@@ -1,0 +1,9 @@
+[package]
+name = "librepo-comparator"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "repo_comparator"
+
+[dependencies]
