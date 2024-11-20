@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use reqwest;
 use serde_json::{Value, json};
+use rpmvercmp;
 
 pub async fn fetch_branch(branch: &str) -> Value {
 	let responce = reqwest::get(format!("https://rdb.altlinux.org/api/export/branch_binary_packages/{branch}"))
