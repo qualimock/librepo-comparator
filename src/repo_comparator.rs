@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, cmp::Ordering};
 
 use reqwest;
 use serde_json::{Value, json};
@@ -66,4 +66,30 @@ fn get_common_packages(branch_a: &HashMap<String, Vec<String>>, branch_b: &HashM
 	}
 
 	common_packages
+}
+
+pub fn compare_versions(branch_a: &HashMap<String, Vec<String>>, branch_b: &HashMap<String, Vec<String>>) -> HashMap<String, Vec<String>> {
+	let common_packages = get_common_packages(branch_a, branch_b);
+
+	let mut newer_packages = HashMap::new();
+
+	for pkg_a in branch_a {
+		if common_packages.contains_key(&pkg_a.0.to_string()) {
+			let pkg_b = branch_b.get_key_value(pkg_a.0.as_str())
+				.expect(format!("There is no package {} in the second branch", pkg_a.0.as_str()).as_str());
+
+			match rpmvercmp::rpmvercmp3("/usr/lib64/librpm.so.7",
+										format!("{}-{}", pkg_a.1[0].as_str(), pkg_a.1[1].as_str()).as_str(),
+										format!("{}-{}", pkg_b.1[0].as_str(), pkg_b.1[1].as_str()).as_str())
+				.expect("rpmvercmp error") {
+				Ordering::Greater => {
+					newer_packages.insert(pkg_a.0.to_string(), pkg_a.1.to_vec());
+				},
+				Ordering::Equal => continue,
+				Ordering::Less => continue
+			}
+		}
+	}
+
+	newer_packages
 }
